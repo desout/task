@@ -1,7 +1,7 @@
 import { Stream } from 'stream';
 
 const calculate = () => { //170/8 bug
-  const firstValue = '1600';
+  const firstValue = '4214';
   const secondValue = '8';
   console.log(`${firstValue}/${secondValue}= ${divElements(firstValue, secondValue)}`);
 };
@@ -17,7 +17,7 @@ const divElements = (firstValue: string, secondValue: string): string => {
     if (!findBiggestValueNumber(firstValue[0], secondValue[0])) {
       secondValue = addLeadingZero(secondValue);
       isAddZero = true;
-      if(isSecondSub){
+      if (isSecondSub) {
         readableStream.push(count.toString());
         count = 0;
         isSecondSub = false;
@@ -28,7 +28,7 @@ const divElements = (firstValue: string, secondValue: string): string => {
       count++;
       console.log(count);
     }
-    if( firstValue[0] === '0' && firstValue){
+    if (firstValue[0] === '0' && firstValue) {
       firstValue = removeLeadingZero(firstValue);
     }
 
@@ -42,12 +42,12 @@ const divElements = (firstValue: string, secondValue: string): string => {
       isSecondSub = false;
     }
   }
-  if(firstValue === '00' || count >0){
+  if (firstValue === '00' || count > 0) {
 
     readableStream.push(count.toString());
   }
   readableStream.push(null);
-  console.log(firstValue,secondValue);
+  console.log(firstValue, secondValue);
   return readableStream.read().toString();
 };
 const findBiggestValueString = (firstValue: string, secondValue: string): boolean => {
@@ -72,10 +72,9 @@ const createBigger = (firstValue: string, secondValue: string): { array: string,
     firstValue += '0';
     count++;
   }
-  return {array: firstValue, count: count};
+  return { array: firstValue, count: count };
 };
 const addLeadingZero = (value: string) => {
-
   return "0" + value;
 };
 const addZeros = (value: string, count: number): string => {
@@ -90,6 +89,7 @@ const subFn = (value: string, index: number, subValue: number, flag: boolean): s
   value.substr(0, index)
   + (flag ? (Number(value[index]) + 10 - subValue) : (Number(value[index]) - subValue))
   + value.substr(index + 1, value.length - index - 1);
+
 const AddFn = (value: string, index: number, addValue: number): string => {
   return value.substr(0, index) + (Number(value[index]) + addValue) + value.substr(index, value.length - index - 1);
 };
