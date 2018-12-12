@@ -10,10 +10,10 @@
     "outDir": "./build",
     "removeComments": true,
     "strict": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noImplicitReturns": true,
     "moduleResolution": "node"
   },
