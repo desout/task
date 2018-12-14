@@ -15,7 +15,8 @@
   "scripts": {
     "build": "tsc",
     "build-watcher": "tsc -w",
-    "start": "node ./build/main",
+    "start": "yarn tsc && node ./build/index",
+    "debug":"yarn tsc && node --inspect ./build/index",
     "test": "jest"
   },
   "repository": {

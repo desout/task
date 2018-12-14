@@ -42,9 +42,7 @@ export const divElements = (firstValue: string, secondValue: string): string => 
     if(firstValue[0] !== '0'){
       isFirst = true;
     }else {
-      if(!isRemoveZero){
-        isFirst = false;
-      }
+      isFirst = isRemoveZero;
       firstValue = removeLeadingZero(firstValue);
     }
     if(firstValue[0] === '0' && isRemoveZero){
@@ -85,7 +83,7 @@ const subFn = (value: string, index: number, subValue: number, flag: boolean): s
   + (flag ? (Number(value[index]) + 10 - subValue) : (Number(value[index]) - subValue))
   + value.substr(index + 1, value.length - index - 1);
 
-const subValues = (firstValue: string, secondValue: string): string => {
+export const subValues = (firstValue: string, secondValue: string): string => {
   let subOne: boolean = false;
   let addTen: boolean = false;
   for (let i = secondValue.length - 1; i >= 0; i--) {
