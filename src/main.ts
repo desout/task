@@ -2,55 +2,65 @@ import { Stream } from 'stream';
 
 export const divElements = (firstValue: string, secondValue: string): string => {
   //stream examples
-  console.log(firstValue,secondValue);
   const readableStream = new Stream.Readable();
   let isRemoveZero: boolean = false;
-  let isPushStream: boolean = false;
   let count: number = 0;
+  let isFirst: boolean = true;
+  let lengthOutput = firstValue.length - secondValue.length === 0 ? 2 : (firstValue.length-secondValue.length + 2);
   if(secondValue === '1' ){
     return firstValue;
   }
+  if(firstValue === secondValue){
+    return '1';
+  }
+  if(firstValue.length < secondValue.length ){
+    return '0';
+  }
+  if( findBiggestValueString(secondValue,firstValue)){
+    lengthOutput--;
+  }
   do {
-    if (firstValue[0] === '0' && !findBiggestValueNumber(secondValue[0],firstValue[1])) {
-      readableStream.push('0');
-      firstValue = removeLeadingZero(firstValue);
-    } else {
-      if (firstValue.length > secondValue.length && findBiggestValueNumber(secondValue[0], firstValue[0])) {
-        secondValue = addLeadingZero(secondValue);
-        isRemoveZero = true;
-
-      }
-      while (findBiggestValueString(firstValue, secondValue)) {
-        firstValue = subValues(firstValue, secondValue);
-        count++;
-      }
-      if((firstValue[0] === '0' && (firstValue[1] !== '0' && findBiggestValueNumber(firstValue[1],secondValue[0]))) || (firstValue[0] === '0' && isRemoveZero)){
-        firstValue = removeLeadingZero(firstValue);
-      }
-      if (isRemoveZero) {
-        secondValue = removeLeadingZero(secondValue);
-        isPushStream = true;
-      }
-      if(!isRemoveZero || isPushStream){
-        readableStream.push(count.toString());
-        count = 0;
-        isPushStream =false;
-      }
-    }
-  }
-  while (firstValue.length > 0 && (firstValue.length > secondValue.length || findBiggestValueString(firstValue,secondValue)));
-  if(count > 0){
     readableStream.push(count.toString());
-  }
+    count = 0;
+    lengthOutput--;
+    if(isRemoveZero){
+      secondValue = removeLeadingZero(secondValue);
+      isRemoveZero = false;
+    }
+    if(lengthOutput !== 0 && firstValue[0] !== '0' && findBiggestValueString(secondValue,firstValue) && firstValue.length > secondValue.length){
+      if(!isFirst){
+        readableStream.push(count.toString());
+        lengthOutput--;
+      }
+      secondValue = addLeadingZero(secondValue);
+      isRemoveZero = true;
+    }
+    while(findBiggestValueString(firstValue,secondValue)){
+      firstValue = subValues(firstValue,secondValue);
+      count++;
+    }
+    if(firstValue[0] !== '0'){
+      isFirst = true;
+    }else {
+      if(!isRemoveZero){
+        isFirst = false;
+      }
+      firstValue = removeLeadingZero(firstValue);
+    }
+    if(firstValue[0] === '0' && isRemoveZero){
+      firstValue = removeLeadingZero(firstValue);
+      isFirst = false;
+    }
 
+  }while (lengthOutput > 0);
   readableStream.push(null);
-  const stream = readableStream.read();
+  let stream = readableStream.read().toString();
+  if(stream[0] === '0' && stream.length > 1){
+    stream = removeLeadingZero(stream);
+  }
   return stream !== null ? stream.toString() : '0';
 };
 const findBiggestValueString = (firstValue: string, secondValue: string): boolean => {
-  if(firstValue.length < secondValue.length){
-    return false;
-  }
   for (let i = 0; i < firstValue.length; i++) {
     if (firstValue[i] === secondValue[i]) {
       continue;
@@ -66,7 +76,6 @@ const findBiggestValueString = (firstValue: string, secondValue: string): boolea
 
 };
 const removeLeadingZero = (value: string) => value.substr(1, value.length - 1);
-const findBiggestValueNumber = (firstValue: string, secondValue: string) => Number(firstValue) >= Number(secondValue);
 const addLeadingZero = (value: string) => {
   return "0" + value;
 };
