@@ -1,6 +1,18 @@
 import { Stream } from 'stream';
+interface returnDiv {
+  mainPart: string;
+  secondPart: string;
 
-export const divElements = (firstValue: string, secondValue: string): string => {
+}
+export const  div = (firstValue: string, secondValue: string, isMod: boolean): string =>{
+  const value = divElements(firstValue,secondValue);
+  if(isMod){
+    return value.secondPart === '' ? '0' : value.secondPart ;
+  }else{
+    return value.mainPart;
+  }
+};
+const divElements = (firstValue: string, secondValue: string): returnDiv => {
   //stream examples
   const readableStream = new Stream.Readable();
   let isRemoveZero: boolean = false;
@@ -8,13 +20,13 @@ export const divElements = (firstValue: string, secondValue: string): string => 
   let isFirst: boolean = true;
   let lengthOutput = firstValue.length - secondValue.length === 0 ? 2 : (firstValue.length-secondValue.length + 2);
   if(secondValue === '1' ){
-    return firstValue;
+    return {mainPart:firstValue,secondPart:'0'} as returnDiv;
   }
   if(firstValue === secondValue){
-    return '1';
+    return {mainPart:'1',secondPart:'0'};
   }
   if(firstValue.length < secondValue.length ){
-    return '0';
+    return {mainPart:'0',secondPart:firstValue};
   }
   if( findBiggestValueString(secondValue,firstValue)){
     lengthOutput--;
@@ -56,7 +68,10 @@ export const divElements = (firstValue: string, secondValue: string): string => 
   if(stream[0] === '0' && stream.length > 1){
     stream = removeLeadingZero(stream);
   }
-  return stream !== null ? stream.toString() : '0';
+  return {
+    mainPart:(stream !== null ? stream.toString() : '0'),
+    secondPart:firstValue
+  }
 };
 const findBiggestValueString = (firstValue: string, secondValue: string): boolean => {
   for (let i = 0; i < firstValue.length; i++) {
@@ -83,7 +98,7 @@ const subFn = (value: string, index: number, subValue: number, flag: boolean): s
   + (flag ? (Number(value[index]) + 10 - subValue) : (Number(value[index]) - subValue))
   + value.substr(index + 1, value.length - index - 1);
 
-export const subValues = (firstValue: string, secondValue: string): string => {
+const subValues = (firstValue: string, secondValue: string): string => {
   let subOne: boolean = false;
   let addTen: boolean = false;
   for (let i = secondValue.length - 1; i >= 0; i--) {
